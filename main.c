@@ -4,17 +4,16 @@
 
 int main(int argc, char **argv)
 {
-    int i;
-	long unsigned int min_size=10;
+	long unsigned int min_size=10000;							/*Tape with dinamic memory allocation*/
     int itm[min_size];
-    for (i=0; i<min_size; i++)
-        itm[i]=0;
+    /*for (i=0; i<min_size; i++)
+        itm[i]=0;*/
     FILE *fp = fopen(argv[1], "rt");
     if ( fp != NULL)
     {
 		char str[255];
         unsigned int j=0;
-        while(fscanf(fp, "%s", str)!=EOF)
+        while(fscanf(fp, "%s", str)!=EOF)						/*Execution of instructions*/
         {
             if (!strcmp(str, "movr"))
             {
@@ -30,13 +29,19 @@ int main(int argc, char **argv)
             {
                 ++itm[j];
                 if (itm[j]==256)
+				{
+					printf("The cell is full.");
                     itm[j]=0;
+				}
             }
             if (!strcmp(str, "dec"))
             {
                 --itm[j];
                 if (itm[j]==-1)
-                    itm[j]=255;
+				{
+					printf("Value of the cell can not be less then 0.");
+                    itm[j]=0;
+				}
             }
             if (!strcmp(str, "print"))
 			{
@@ -57,7 +62,7 @@ int main(int argc, char **argv)
                 {
                     while (strcmp(str,"end"))
 					{
-						fgets(str, sizeof(str), fp);
+						fscanf(fp, "%s", str);
 					}
                 }
                 else
@@ -81,13 +86,16 @@ int main(int argc, char **argv)
 							{
 								++itm[j];
 								if (itm[j]==256)
+								{
+									printf("The cell is full.");
 									itm[j]=0;
+								}
 							}
 							if (!strcmp(str, "dec"))
 							{
 								--itm[j];
 								if (itm[j]==-1)
-									itm[j]=255;
+									itm[j]=0;
 							}
 							if (!strcmp(str, "print"))
 								printf("%d\n", itm[j]);
